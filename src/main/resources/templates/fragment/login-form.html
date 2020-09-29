@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>登录表单</title>
+</head>
+<body>
+<div id="login-form" th:fragment="login-fragment">
+    <div class="modal fade" id="login" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <!-- data-dismiss关闭当前modal对话框 -->
+                    <button class="close" data-dismiss="modal">&times;</button>
+                    <h4>用户登录</h4>
+                </div>
+                <div class="modal-body">
+                    <form id="loginForm" action="/user/login">
+                        <label>用户名</label>
+                        <input type="text" class="form-control" name="username">
+                        <label>密码</label>
+                        <input type="password" class="form-control" name="userPassword">
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-primary" data-dissmiss="modal" onclick="login()">登录</button>
+                    <button class="btn btn-primary" data-dismiss="modal">取消</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        function login() {
+            var formdate = $("#loginForm").serialize(); //序列化表单数据
+            $.ajax({
+                type:"POST",
+                url:"/user/login",
+                data:formdate,
+                dataType: "text", //return dataType: text or json
+                success:function (json) {
+                    if(json == "success"){
+                        location.reload();
+                    }else{
+                        alert("登录失败，请检查账号密码")
+                    }
+
+                },
+                error: function (json) {
+                    alert("登录出错，请检查网络...")
+                    return
+                },
+            })
+        }
+    </script>
+</div>
+
+</body>
+</html>

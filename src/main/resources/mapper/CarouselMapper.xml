@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.demo.mapper.CarouselMapper">
+    <resultMap id="BaseResultMap" type="com.example.demo.pojo.Carousel">
+        <id column="carousel_id" jdbcType="INTEGER" property="carouselId"/>
+        <result column="carousel_url" jdbcType="VARCHAR" property="carouselUrl"/>
+        <result column="redirect_url" jdbcType="VARCHAR" property="redirectUrl"/>
+        <result column="carousel_rank" jdbcType="INTEGER" property="carouselRank"/>
+        <result column="is_deleted" jdbcType="INTEGER" property="isDeleted"/>
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
+        <result column="create_user" jdbcType="VARCHAR" property="createUser"/>
+        <result column="update_time" jdbcType="TIMESTAMP" property="updateTime"/>
+        <result column="update_user" jdbcType="VARCHAR" property="updateUser"/>
+    </resultMap>
+
+    <select id="queryCarouselList" parameterType="com.example.demo.pojo.Carousel" resultMap="BaseResultMap">
+      <if test="carousel != null">
+          select * from shopmall.tb_carousel a where 1=1
+          <if test="carousel.carouselId != null and carousel.carouselId != '' and carousel.carouselId != 0"><![CDATA[and a.carousel_id =  #{carousel.carouselId}]]></if>
+          <if test="carousel.isDeleted != null and carousel.isDeleted != ''"><![CDATA[and a.is_deleted =  #{carousel.isDeleted}]]></if>
+      </if>
+    </select>
+    <select id="queryCarouselOne" parameterType="int" resultMap="BaseResultMap">
+        select * from shopmall.tb_carousel where carousel_id = #{carouselId}
+    </select>
+
+    <insert id="addCarousel" parameterType="com.example.demo.pojo.Carousel">
+
+        insert into shopmall.tb_carousel(carousel_url,redirect_url,carousel_rank,is_deleted,create_user,update_user)
+            values
+        (
+        #{carouselUrl},#{redirectUrl},#{carouselRank},#{isDeleted},#{createUser},#{updateUser}
+        )
+    </insert>
+    <update id="editCarousel" parameterType="com.example.demo.pojo.Carousel">
+        update shopmall.tb_carousel set carousel_url = #{carouselUrl},redirect_url = #{redirect_url},carousel_rank = #{carousel_rank},create_user=#{createUser},create_time=#{create_time},
+                      update_user=#{updateUser},update_time=#{updateTime},is_deleted = #{isDeleted}
+    </update>
+
+    <!--逻辑删除-->
+    <update id="delCarousel" parameterType="int">
+        update shopmall.tb_carousel set is_deleted = 1 where carousel_id = #{carouselId}
+    </update>
+
+    <!--真正展示在前台首页：可以设置轮播图数量,降序展示-->
+    <select id="showCarouselToIndex" parameterType="com.example.demo.pojo.Carousel" resultMap="BaseResultMap">
+        <if test="carousel != null">
+            select * from shopmall.tb_carousel a where 1=1
+            <if test="carousel.carouselId != null and carousel.carouselId != ''"><![CDATA[and a.carousel_id =  #{carousel.carouselId}]]></if>
+            <if test="carousel.isDeleted != null and carousel.isDeleted != ''"><![CDATA[and a.is_deleted =  #{carousel.isDeleted}]]></if>
+            order by a.carousel_rank desc
+            limit #{size}
+        </if>
+
+    </select>
+
+
+</mapper>

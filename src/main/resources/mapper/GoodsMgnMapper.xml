@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.example.demo.mapper.GoodsMgnMapper">
+    <resultMap id="goodsResultMap" type="com.example.demo.pojo.Goods">
+        <id column="goods_id" jdbcType="INTEGER" property="goodsId"/>
+        <result column="goods_name" jdbcType="VARCHAR" property="goodsName"/>
+        <result column="goods_intro" jdbcType="VARCHAR" property="goodsIntro"/>
+        <result column="goods_dict_id" jdbcType="BIGINT" property="goodsDictId"/>
+        <result column="goods_cover_img" jdbcType="VARCHAR" property="goodsCoverImg"/>
+        <result column="goods_carousel" jdbcType="VARCHAR" property="goodsCarousel"/>
+        <result column="original_price" jdbcType="INTEGER" property="originalPrice"/>
+        <result column="selling_price" jdbcType="INTEGER" property="sellingPrice"/>
+        <result column="stock_num" jdbcType="INTEGER" property="stockNum"/>
+        <result column="tag" jdbcType="VARCHAR" property="tag"/>
+        <result column="goods_sell_status" jdbcType="INTEGER" property="goodsSellStatus"/>
+        <result column="create_user_id" jdbcType="INTEGER" property="createUserId"/>
+        <result column="create_user_username" jdbcType="VARCHAR" property="createUserUsername"/>
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
+        <result column="update_user_id" jdbcType="INTEGER" property="updateUserId"/>
+        <result column="update_user_username" jdbcType="VARCHAR" property="updateUserUsername"/>
+        <result column="update_time" jdbcType="TIMESTAMP" property="updateTime"/>
+        <result column="goods_pur_price" jdbcType="INTEGER" property="goodsPurPrice"/>
+        <result column="is_del" jdbcType="INTEGER" property="isDel"/>
+        <result column="img_detail_id" jdbcType="INTEGER" property="imgDetailId"/>
+        <result column="goods_detail_content" jdbcType="VARCHAR" property="goodsDetailContent"/>
+    </resultMap>
+
+    <insert id="addGoods" parameterType="Goods" useGeneratedKeys="true" keyProperty="goodsId">
+        insert into shopmall.tb_goods_info (
+                    goods_name,
+                    goods_intro,
+                    goods_dict_id,
+                    goods_cover_img,
+                    goods_carousel,
+                    goods_detail_content,
+                    original_price,
+                    selling_price,
+                    stock_num,
+                    tag,
+                    create_user_id,
+                    create_time,
+                    update_user_id,
+                    update_time,
+                    goods_pur_price,
+                    is_del,
+                    create_user_username,
+                    update_user_username,
+                    goods_sell_status
+        )values (
+                    #{goodsName},#{goodsIntro},#{goodsDictId},#{goodsCoverImg},#{goodsCarousel},
+                    #{goodsDetailContent},#{originalPrice},#{sellingPrice},#{stockNum},#{tag},
+                    #{createUserId},#{createTime},#{updateUserId},#{updateTime},#{goodsPurPrice},#{isDel},
+                    #{createUserUsername},#{updateUserUsername},#{goodsSellStatus}
+        )
+    </insert>
+
+    <update id="updateGoods" parameterType="Goods" useGeneratedKeys="true" keyProperty="goodsId" keyColumn="goods_id">
+        update shopmall.tb_goods_info
+        set goods_name = #{goodsName,jdbcType=VARCHAR},
+          goods_intro = #{goodsIntro,jdbcType=VARCHAR},
+        <if test="goodsCoverImg != null and goodsCoverImg != ''"><![CDATA[and goods_cover_img =  #{goodsCoverImg}]]></if>
+        <if test="goodsCarousel != null and goodsCarousel != ''"><![CDATA[and goods_carousel =  #{goodsCarousel}]]></if>
+          original_price = #{originalPrice,jdbcType=INTEGER},
+          selling_price = #{sellingPrice,jdbcType=INTEGER},
+          stock_num = #{stockNum,jdbcType=INTEGER},
+          tag = #{tag,jdbcType=VARCHAR},
+          goods_sell_status = #{goodsSellStatus,jdbcType=INTEGER},
+          create_user_id = #{createUserId,jdbcType=INTEGER},
+          create_time = #{createTime,jdbcType=TIMESTAMP},
+          update_user_id = #{updateUserId,jdbcType=INTEGER},
+          update_time = #{updateTime,jdbcType=TIMESTAMP},
+          goods_pur_price = #{goodsPurPrice},
+          is_del = #{isDel,jdbcType=INTEGER}
+        where goods_id = #{goodsId,jdbcType=BIGINT}
+    </update>
+    <update id="updateStatus" parameterType="int">
+        update tb_goods_info set goods_sell_status = !goods_sell_status where goods_id = #{goodsId}
+    </update>
+
+    <select id="queryGoodsList" resultMap="goodsResultMap">
+        select * from shopmall.tb_goods_info where is_del = 0
+    </select>
+
+    <!--物理删除-->
+    <delete id="phyDeleteGoods" parameterType="int">
+        delete from shopmall.tb_goods_info where goods_id = #{goodsId}
+    </delete>
+    <!--逻辑删除-->
+    <update id="deleteGoods" parameterType="int">
+        update shopmall.tb_goods_info set is_del = 1 where goods_id = #{goodsId}
+    </update>
+
+    <select id="queryGoodsByGoodsId" parameterType="int" resultMap="goodsResultMap">
+        select * from shopmall.tb_goods_info where goods_id = #{goodsId}
+    </select>
+
+    <select id="queryGoodsLinkGoodsName" parameterType="String" resultMap="goodsResultMap">
+        select * from shopmall.tb_goods_info where goods_name like CONCAT(CONCAT('%', #{goodsName}), '%')
+    </select>
+
+    <select id="queryGoodsListByGoods" parameterType="com.example.demo.pojo.Goods" resultMap="goodsResultMap">
+
+        select * from shopmall.tb_goods_info a where 1=1
+        <if test="goods != null">
+            <if test="goods.goodsId != null and goods.goodsId != ''"><![CDATA[and a.goods_id =  #{goods.goodsId}]]></if>
+            <if test="goods.goodsDictId != null and goods.goodsDictId != ''"><![CDATA[and a.goods_dict_id =  #{goods.goodsDictId}]]></if>
+
+            <if test="goods.goodsName != null and goods.goodsName != ''"><![CDATA[and a.goods_name like CONCAT(CONCAT('%', #{goods.goodsName}), '%')]]></if>
+            <if test="goods.isDel != null"><![CDATA[and a.is_del =  #{goods.isDel}]]></if>
+            <if test="goods.goodsSellStatus != null"><![CDATA[and a.goods_sell_status =  #{goods.goodsSellStatus}]]></if>
+
+            limit #{start},#{pageSize}
+        </if>
+    </select>
+
+    <select id="getGoodsTotalCount" parameterType="com.example.demo.pojo.Goods" resultType="int">
+        select count(*) from shopmall.tb_goods_info a where 1=1
+        <if test="goods != null">
+            <if test="goods.goodsId != null and goods.goodsId != ''"><![CDATA[and a.goods_id =  #{goods.goodsId}]]></if>
+            <if test="goods.goodsDictId != null and goods.goodsDictId != ''"><![CDATA[and a.goods_dict_id =  #{goods.goodsDictId}]]></if>
+
+            <if test="goods.goodsName != null and goods.goodsName != ''"><![CDATA[and a.goods_name like CONCAT(CONCAT('%', #{goods.goodsName}), '%')]]></if>
+            <if test="goods.isDel != null"><![CDATA[and a.is_del =  #{goods.isDel}]]></if>
+            <if test="goods.goodsSellStatus != null"><![CDATA[and a.goods_sell_status =  #{goods.goodsSellStatus}]]></if>
+        </if>
+    </select>
+
+
+    <!--首页配置-->
+
+
+
+</mapper>

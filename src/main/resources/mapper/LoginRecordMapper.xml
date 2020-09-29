@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.example.demo.mapper.LoginRecordMapper">
+
+    <resultMap type="com.example.demo.pojo.LoginRecord" id="resultMap">
+        <result column="id" property="id"/>
+        <result column="username"  property="username"/>
+        <result column="nick_name"  property="nickName"/>
+        <result column="sex" property="sex"/>
+        <result column="head_url" property="headUrl"/>
+        <result column="role" property="role"/>
+        <result column="login_date" property="loginDate"/>
+    </resultMap>
+    <insert id="addLoginRecord" parameterType="com.example.demo.pojo.LoginRecord">
+        insert into shopmall.tb_login_record (username, nick_name, sex, head_url, role,login_date) values
+        (#{username},#{nickName},#{sex},#{headUrl},#{role},now())
+    </insert>
+    <select id="queryLoginRecords" parameterType="com.example.demo.pojo.LoginRecord" resultMap="resultMap">
+        select * from shopmall.tb_login_record a where 1=1
+        <if test="loginRecord != null">
+            <if test="loginRecord.nickName != null and loginRecord.nickName != ''">
+                <![CDATA[and a.nick_name like CONCAT(CONCAT('%', #{loginRecord.nickName}), '%')]]>
+            </if>
+        </if>
+        order by login_date desc
+        limit #{start},#{pageSize}
+    </select>
+    <select id="getRecordTotalCount" parameterType="com.example.demo.pojo.LoginRecord" resultType="int">
+        select count(*) from shopmall.tb_login_record a where 1=1
+        <if test="loginRecord != null">
+            <if test="loginRecord.nickName != null and loginRecord.nickName != ''">
+                <![CDATA[and a.nick_name like CONCAT(CONCAT('%', #{loginRecord.nickName}), '%')]]>
+            </if>
+        </if>
+    </select>
+    <!--每周一凌晨清除七天前的登录记录-->
+    <delete id="cleanLoginRecordBeforeSevenDays">
+        delete from shopmall.tb_login_record where DATEDIFF(now(),login_date)>7
+    </delete>
+
+</mapper>

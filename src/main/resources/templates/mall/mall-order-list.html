@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>订单列表</title>
+    <link rel="stylesheet" th:href="@{/bootstrap/css/bootstrap.css}">
+    <link rel="stylesheet" th:href="@{/mall/mall-order-list/mall-order-list.css}">
+</head>
+<body>
+<!--载入头部-->
+<!--<header th:replace="fragment/header::header-fragment"></header>-->
+
+<div class="container order-list-top">
+    <h2>填写并核对订单信息</h2>
+    <button class="btn btn-success orderSubmit">提交订单</button>
+    <hr class="thr">
+    <div class="ord-list">
+
+        <div class="ord-item">
+            <a href=""><img src="http://139.199.157.189/shopmall/c6503515-eeff-4f1a-892d-bbdf5987e684.png" alt=""></a>
+            <div class="item-span">
+                <span>3000</span>元&nbsp;&nbsp;*&nbsp;&nbsp;<span>2</span>
+            </div>
+            <hr class="item-hr">
+        </div>
+        <div class="ord-item">
+            <a href=""><img src="http://139.199.157.189/shopmall/c6503515-eeff-4f1a-892d-bbdf5987e684.png" alt=""></a>
+            <div class="item-span">
+                <span>3000</span>元&nbsp;&nbsp;*&nbsp;&nbsp;<span>2</span>
+            </div>
+            <hr class="item-hr">
+        </div>
+        <div class="ord-item">
+            <a href=""><img src="http://139.199.157.189/shopmall/c6503515-eeff-4f1a-892d-bbdf5987e684.png" alt=""></a>
+            <div class="item-span">
+                <span>3000</span>元&nbsp;&nbsp;*&nbsp;&nbsp;<span>2</span>
+            </div>
+            <hr class="item-hr">
+        </div>
+        <div class="ord-item">
+            <a href=""><img src="http://139.199.157.189/shopmall/c6503515-eeff-4f1a-892d-bbdf5987e684.png" alt=""></a>
+            <div class="item-span">
+                <span>3000</span>元&nbsp;&nbsp;*&nbsp;&nbsp;<span>2</span>
+            </div>
+            <hr class="item-hr">
+        </div>
+    </div>
+
+    <div class="recDiv">
+        <div class="recMsg">
+            <h3>收货信息</h3>
+            <p>北京市昌平区TBD云集中心</p>
+        </div>
+        <button class="btn btn-default editBtn">修改</button>
+    </div>
+    <hr style="margin-top: 100px">
+    <div class="pay">
+        <table id="priceTable" class="table table-condensed">
+            <tbody>
+                <tr>
+                    <td>商品总价:</td>
+                    <td><strong>10000</strong>&nbsp;<span>元</span></td>
+                </tr>
+                <tr>
+                    <td>运费:</td>
+                    <td><strong>0</strong>&nbsp;<span>元</span></td>
+                </tr>
+                <tr class="payEable">
+                    <td>应付金额:</td>
+                    <td id="allPay"><strong>1000</strong>&nbsp;<span>元</span></td>
+                </tr>
+            </tbody>
+        </table>
+
+
+
+    </div>
+</div>
+
+<!--载入尾部-->
+<!--<div th:replace="fragment/footer::footer-fragment"></div>-->
+</body>
+</html>

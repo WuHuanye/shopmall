@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.example.demo.mapper.InfoMapper">
+    <resultMap type="com.example.demo.pojo.Info" id="resultMap">
+        <result column="id" property="rid"/>
+        <result column="user_id"  property="userId"/>
+        <result column="create_time"  property="createDate"/>
+        <result column="revert_time" property="revertDate"/>
+        <result column="content" property="content"/>
+        <result column="status"  property="status"/>
+        <result column="revert_content"  property="revertContent"/>
+        <result column="nick_name"  property="nickNameVo"/>
+        <result column="email"  property="emailVo"/>
+    </resultMap>
+
+    <insert id="save" parameterType="com.example.demo.pojo.Info">
+        insert into shopmall.tb_info (user_id, content, create_time, revert_time,status,revert_content,nick_name,email) VALUES
+        (#{userId},#{content},now(),#{revertDate},#{status},#{revertContent},#{nickNameVo},#{emailVo})
+    </insert>
+    <update id="update" parameterType="com.example.demo.pojo.Info">
+        update shopmall.tb_info set revert_time = #{revertDate},revert_content=#{revertContent},status=#{status} where id = #{rid}
+    </update>
+    <delete id="deleteById" parameterType="int">
+        delete from shopmall.tb_info where id = #{rid}
+    </delete>
+
+    <!--分页展示-->
+    <select id="queryInfoListByInfo" parameterType="com.example.demo.pojo.Info" resultMap="resultMap">
+        select * from shopmall.tb_info a where 1 = 1
+        <if test="info != null">
+            <if test="info.rid != null and info.rid != ''"><![CDATA[and a.id =  #{info.rid}]]></if>
+            <if test="info.userId != null and info.userId != ''"><![CDATA[and a.user_id =  #{info.userId}]]></if>
+            <if test="info.content != null and info.content != ''"><![CDATA[and a.content like CONCAT(CONCAT('%', #{info.content}), '%')]]></if>
+            limit #{start},#{pageSize}
+        </if>
+    </select>
+    <select id="getInfoTotalCount" parameterType="com.example.demo.pojo.Info" resultType="int">
+        select count(*) from shopmall.tb_info a where 1 = 1
+        <if test="info != null">
+            <if test="info.rid != null and info.rid != ''"><![CDATA[and a.id =  #{info.rid}]]></if>
+            <if test="info.userId != null and info.userId != ''"><![CDATA[and a.user_id =  #{info.userId}]]></if>
+            <if test="info.content != null and info.content != ''"><![CDATA[and a.content like CONCAT(CONCAT('%', #{info.content}), '%')]]></if>
+        </if>
+    </select>
+
+</mapper>

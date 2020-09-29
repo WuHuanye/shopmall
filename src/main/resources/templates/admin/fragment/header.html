@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>头部导航</title>
+</head>
+<body>
+<!--头部导航-->
+<div class="layui-header" th:fragment="header-fragment">
+    <div class="layui-logo">
+        <img th:src="${user.logoUrl}" src="http://t.cn/RCzsdCq" class="layui-nav-img">
+        <a th:href="@{/admin}" style="color: #00F7DE">SHOPMALL 管理</a>
+    </div>
+    <!-- 头部区域（可配合layui已有的水平导航） -->
+    <!--<ul class="layui-nav layui-layout-left">
+        <li class="layui-nav-item"><a href="">控制台</a></li>
+        <li class="layui-nav-item"><a href="">商品管理</a></li>
+        <li class="layui-nav-item"><a href="">用户</a></li>
+        <li class="layui-nav-item">
+            <a href="javascript:;">其它系统</a>
+            <dl class="layui-nav-child">
+                <dd><a href="">邮件管理</a></dd>
+                <dd><a href="">消息管理</a></dd>
+                <dd><a href="">授权管理</a></dd>
+            </dl>
+        </li>
+    </ul>-->
+    <ul class="layui-nav layui-layout-right">
+        <li class="layui-nav-item">
+            <a href="javascript:;">
+                <img th:src="${user.headUrl}" src="http://t.cn/RCzsdCq" class="layui-nav-img">
+                <font color="#00ffff">[[${user.nickName}]]</font>
+            </a>
+            <dl class="layui-nav-child">
+                <dd><a href="">基本资料</a></dd>
+                <dd><a th:href="@{/user/quit}">退了</a></dd>
+            </dl>
+        </li>
+        <li class="layui-nav-item"><a th:href="@{/}">用户首页</a></li>
+    </ul>
+</div>
+
+</body>
+</html>

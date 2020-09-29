@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>我的订单</title>
+    <link rel="stylesheet" th:href="@{/bootstrap/css/bootstrap.css}">
+</head>
+<body>
+<style>
+    body{
+        background-color: #a6e1ec;
+    }
+    .top{
+        margin-left: 230px;
+        margin-right: 230px;
+        margin-top: 80px;
+        padding: 40px;
+        background-color: white;
+    }
+    .in-date{
+    }
+    .in-money{
+        float: right;
+    }
+    .in-money font{
+        font-size: 25px;
+        color: #a6e1ec;
+    }
+    .haspay-items a{
+        float: right;
+    }
+    .haspay-item{
+
+    }
+    .haspay-item img{
+        width: 150px;
+        height: 120px;
+        margin-bottom: 5px;
+        margin-right: 150px;
+    }
+</style>
+<!--载入头部-->
+<!--<header th:replace="fragment/header::header-fragment"></header>-->
+    <div class="top">
+        <h1>我的订单</h1>
+        <div class="haspay">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3>
+                        已支付
+                    </h3>
+                </div>
+                <div class="panel-body">
+                    <span class="in-date">
+                        2020-9-9
+                    </span>
+                    <span class="in-money">应付金额：<font>100</font>元</span>
+                    <hr>
+                    <div class="haspay-items">
+                        <a href="">订单详情</a>
+                        <div class="haspay-item">
+                            <img src="http://139.199.157.189/shopmall/c6503515-eeff-4f1a-892d-bbdf5987e684.png" alt="">
+                            <lable>商品名称。。。。。</lable>
+                        </div>
+                        <div class="haspay-item">
+                            <img src="http://139.199.157.189/shopmall/c6503515-eeff-4f1a-892d-bbdf5987e684.png" alt="">
+                            <lable>商品名称。。。。。</lable>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="haspay">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3>
+                        待支付
+                    </h3>
+                </div>
+                <div class="panel-body">
+                    <span class="in-date">
+                        2020-9-9
+                    </span>
+                    <span class="in-money">应付金额：<font>100</font>元</span>
+                    <hr>
+                    <div class="haspay-items">
+                        <a href="">订单详情</a>
+                        <div class="haspay-item">
+                            <img src="http://139.199.157.189/shopmall/c6503515-eeff-4f1a-892d-bbdf5987e684.png" alt="">
+                            <lable>商品名称。。。。。</lable>
+                        </div>
+                        <div class="haspay-item">
+                            <img src="http://139.199.157.189/shopmall/c6503515-eeff-4f1a-892d-bbdf5987e684.png" alt="">
+                            <lable>商品名称。。。。。</lable>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+<!--载入尾部-->
+<!--<div th:replace="fragment/footer::footer-fragment"></div>-->
+</body>
+</html>

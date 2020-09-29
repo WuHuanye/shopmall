@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>LOGO-LINK</title>
+    <link rel="stylesheet" th:href="@{/layui/css/layui.css}">
+    <script th:src="@{/layui/layui.js}"></script>
+    <script th:src="@{/pub/jquery-3.4.1.min.js}"></script>
+</head>
+<body>
+<fieldset class="layui-elem-field layui-field-title" style="margin-top: 30px;">
+    <legend>项目logo和联系我们（二维码)</legend>
+</fieldset>
+    <div class="layui-upload layui-inline" style="margin-left: 35%">
+        <button type="button" class="layui-btn" id="test1" lay-data="{type:'sys',sysType:'logo'}"><i class="layui-icon"></i>LOGO上传</button>
+        <div class="layui-upload-list">
+            <img class="layui-upload-img" src="http://139.199.157.189/shopmall/sys/sys_LOGO.jpg" id="demo1" style="width: 80px;height: 80px">
+            <p id="demoText"></p>
+        </div>
+        <button type="button" class="layui-btn layui-btn-warm" id="logobtn">上传</button>
+    </div>
+    <div class="layui-upload layui-inline" style="margin-left: 10%">
+        <button type="button" class="layui-btn" id="test2" lay-data="{type:'sys',sysType:'link'}"><i class="layui-icon"></i>联系我们上传</button>
+        <div class="layui-upload-list">
+            <img class="layui-upload-img" id="demo2" style="width: 80px;height: 80px" src="http://139.199.157.189/shopmall/sys/sys_LINK.jpg">
+            <p id="demoText2"></p>
+        </div>
+        <button type="button" class="layui-btn layui-btn-warm" id="linkbtn">上传</button>
+    </div>
+    <script>
+        layui.use('upload', function() {
+            var $ = layui.jquery
+                , upload = layui.upload;
+
+            //logo图片上传
+            var uploadInst = upload.render({
+                elem: '#test1',
+                    url: '/admin/uploadImg2', //改成您自己的上传接口
+                    multiple: true,   //是否允许多文件上传，默认未false
+                    acceptMine:'/image/*', //只选择图片
+                    auto: false,  //是否自动上传 ，默认为true
+                    size: 1024*6, //最大文件大小，单位k
+                    bindAction: '#logobtn', //绑定的按钮
+                    field: 'file'   //传到后台的字段名,默认file
+                , before: function (obj) {
+                    // alert(this.sysType)
+                    this.data={'type':this.type,'sysType':this.sysType};//关键代码
+                    obj.preview(function (index, file, result) {
+                        $('#demo1').attr('src', result); //图片链接（base64）
+                    });
+                }
+                , done: function (res) {
+                    //如果上传失败
+                    if (res.code > 0) {
+                        return layer.msg('上传失败');
+                    }
+                    //上传成功
+                }
+                , error: function () {
+                    //演示失败状态，并实现重传
+                    var demoText = $('#demoText');
+                    demoText.html('<span style="color: #FF5722;">上传失败</span> <a class="layui-btn layui-btn-xs demo-reload">重试</a>');
+                    demoText.find('.demo-reload').on('click', function () {
+                        uploadInst.upload();
+                    });
+                }
+            })
+
+
+            //联系我们图片上传
+            var uploadInst2 = upload.render({
+                elem: '#test2',
+                url: '/admin/uploadImg2', //改成您自己的上传接口
+                multiple: true,   //是否允许多文件上传，默认未false
+                acceptMine:'/image/*', //只选择图片
+                auto: false,  //是否自动上传 ，默认为true
+                size: 1024*6, //最大文件大小，单位k
+                bindAction: '#linkbtn', //绑定的按钮
+                field: 'file'   //传到后台的字段名,默认file
+                , before: function (obj) {
+                    // alert(this.sysType)
+                    this.data={'type':this.type,'sysType':this.sysType};//关键代码
+                    //预读本地文件示例，不支持ie8
+                    obj.preview(function (index, file, result) {
+                        $('#demo2').attr('src', result); //图片链接（base64）
+                    });
+                }
+                , done: function (res) {
+                    //如果上传失败
+                    if (res.code > 0) {
+                        return layer.msg('上传失败');
+                    }
+                    //上传成功
+                }
+                , error: function () {
+                    //演示失败状态，并实现重传
+                    var demoText = $('#demoText2');
+                    demoText.html('<span style="color: #FF5722;">上传失败</span> <a class="layui-btn layui-btn-xs demo-reload">重试</a>');
+                    demoText.find('.demo-reload').on('click', function () {
+                        uploadInst.upload();
+                    });
+                }
+            })
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.example.demo.mapper.UserMgnMapper">
+    <resultMap type="com.example.demo.pojo.User" id="resultMap">
+        <result column="user_id" property="userId"/>
+        <result column="nick_name"  property="nickName"/>
+        <result column="user_name"  property="username"/>
+        <result column="user_password" property="userPassword"/>
+        <result column="user_email" property="email"/>
+        <result column="address"  property="address"/>
+        <result column="is_deleted" property="isDeleted"/>
+        <result column="head_url"  property="headUrl"/>
+        <result column="create_time"  property="createTime"/>
+        <result column="role_id"  property="roleId"/>
+        <result column="user_sex"  property="sex"/>
+        <result column="user_birthday"  property="birthday"/>
+    </resultMap>
+    <select id="findUserList" resultMap="resultMap">
+        select * from shopmall.tb_user
+    </select>
+    <update id="delete" parameterType="int">
+        update shopmall.tb_user set is_deleted = 1 where user_id = #{userId}
+    </update>
+    <update id="resetPsw" parameterType="int">
+        update shopmall.tb_user set user_email = #{email}
+    </update>
+    <select id="queryById" parameterType="int" resultMap="resultMap">
+        select * from shopmall.tb_user where user_id = #{userId} limit 1
+    </select>
+
+    <!--分页展示-->
+    <select id="queryUsersListByUser" parameterType="com.example.demo.pojo.User" resultMap="resultMap">
+        select * from shopmall.tb_user a where 1 = 1 and a.is_deleted =  0
+        <if test="user != null">
+            <if test="user.userId != null and user.userId != ''"><![CDATA[and a.user_id =  #{user.userId}]]></if>
+            <if test="user.username != null and user.username != ''"><![CDATA[and a.user_name like CONCAT(CONCAT('%', #{user.username}), '%')]]></if>
+            <if test="user.nickName != null and user.nickName != ''"><![CDATA[and a.nick_name like CONCAT(CONCAT('%', #{user.nickName}), '%')]]></if>
+            limit #{start},#{pageSize}
+        </if>
+    </select>
+    <select id="getUserTotalCount" parameterType="com.example.demo.pojo.User" resultType="int">
+        select count(*) from shopmall.tb_user a where 1 = 1 and a.is_deleted =  0
+        <if test="user != null">
+            <if test="user.userId != null and user.userId != ''"><![CDATA[and a.user_id =  #{user.userId}]]></if>
+            <if test="user.username != null and user.username != ''"><![CDATA[and a.user_name like CONCAT(CONCAT('%', #{user.username}), '%')]]></if>
+        </if>
+    </select>
+
+    <insert id="save" parameterType="com.example.demo.pojo.User">
+        insert into shopmall.tb_user(user_name,user_password,user_birthday,head_url,user_email,address,is_deleted,user_sex,role_id,nick_name)
+        values (#{username},#{userPassword},#{birthday},#{headUrl},#{email},#{address},#{isDeleted},#{sex},#{roleId},#{nickName})
+    </insert>
+</mapper>

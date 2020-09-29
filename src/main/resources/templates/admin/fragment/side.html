@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>侧边栏</title>
+</head>
+<body>
+<!--侧边导航-->
+<div class="layui-side layui-bg-black" th:fragment="side-fragment">
+    <div class="layui-side-scroll">
+        <!-- 左侧导航区域（可配合layui已有的垂直导航） -->
+        <ul class="layui-nav layui-nav-tree"  lay-filter="test">
+            <li class="layui-nav-item"><a data-id="6" data-title="添加商品" href="javascript:;" data-url="/admin/goods/form" class="site-demo-active">添加商品</a></li>
+            <li class="layui-nav-item layui-nav-item"><!--layui-nav-itemed  默认菜单栏展开-->
+                <a class="" href="javascript:;">首页配置</a>
+                <dl class="layui-nav-child">
+                    <dd><a data-id="4" data-title="轮播图管理" href="javascript:;" data-url="/admin/indexconf/list" class="site-demo-active">轮播图管理</a></dd>
+                    <dd><a data-id="5" data-title="首页商品管理" href="javascript:;" data-url="/admin/indexconf/indexgoodsConfig" class="site-demo-active">首页商品管理</a></dd>
+                    <dd><a data-id="8" data-title="系统图片" href="javascript:;" data-url="/admin/indexconf/sysPic" class="site-demo-active">系统图片</a></dd>
+                </dl>
+            </li>
+            <li class="layui-nav-item layui-nav-itemed">
+                <a href="javascript:;">管理模块</a>
+                <dl class="layui-nav-child">
+                    <dd><a data-id="1" data-title="产品管理" href="javascript:;" data-url="/admin/goods/list" class="site-demo-active">产品管理</a></dd>
+                    <dd><a data-id="2" data-title="用户管理" href="javascript:;" data-url="/admin/user/list" class="site-demo-active">用户管理</a></dd>
+                    <dd><a data-id="3" data-title="反馈管理" href="javascript:;" data-url="/admin/info/list" class="site-demo-active">反馈管理</a></dd>
+                </dl>
+            </li>
+            <li class="layui-nav-item"><a data-id="7" data-title="登录记录查看" href="javascript:;" data-url="/admin/record/list" class="site-demo-active">登录记录查看</a></li>
+        </ul>
+    </div>
+</div>
+</body>
+</html>

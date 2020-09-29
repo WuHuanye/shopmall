@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>用户登录记录查看</title>
+    <link rel="stylesheet" th:href="@{/layui/css/layui.css}">
+    <script th:src="@{/layui/layui.js}" charset="utf-8"></script>
+    <script th:src="@{/admin/record/loginRecordmgn.js}"></script>
+
+
+</head>
+<body>
+<style>
+    .layui-table-cell {
+        /*height: auto;*/
+        height: 60px;
+        width: 100px;
+    }
+</style>
+<div>
+
+    <div style="padding-left: 20px;padding-right: 20px">
+        <div class="layui-input-inline">
+            <input type="text" required  lay-verify="required" placeholder="请输入用户昵称" autocomplete="off" class="layui-input" id="nickName">
+        </div>
+        <div class="layui-input-inline">
+            <button class="layui-btn search_btn">查询</button>
+        </div>
+    </div>
+    <table class="layui-hide" id="test" lay-filter="test"></table>
+
+    <script type="text/html" id="toolbarDemo">
+        <!--<div class="layui-btn-container">
+            <button class="layui-btn layui-btn-sm" lay-event="getCheckData">获取选中行数据</button>
+            <button class="layui-btn layui-btn-sm" lay-event="getCheckLength">获取选中数目</button>
+            <button class="layui-btn layui-btn-sm" lay-event="isAll">验证是否全选</button>
+        </div>-->
+    </script>
+
+    <script type="text/html" id="barDemo">
+        <a class="layui-btn layui-btn-xs disabled" lay-event="edit">编辑</a>
+        <a class="layui-btn layui-btn-danger layui-btn-xs disabled" lay-event="del">删除</a>
+    </script>
+</div>
+
+
+<script th:src="@{/pub/jquery-3.4.1.min.js}"></script>
+
+</body>
+</html>

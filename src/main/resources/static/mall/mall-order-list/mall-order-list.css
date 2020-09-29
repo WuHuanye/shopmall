@@ -1,0 +1,76 @@
+body{
+    background-color: #8c8c8c;
+}
+.order-list-top{
+    width: 1000px;
+    padding-top: 90px;
+    padding-right: 100px;
+    padding-left: 100px;
+    background-color: white;
+}
+.orderSubmit{
+    float: right;
+    margin-right: 20px;
+    width: 90px;
+    border-radius: 0;
+}
+.thr{
+    margin-top: 60px;
+}
+.ord-item{
+    width: 700px;
+    height: 120px;
+    padding-left: 30px;
+}
+.ord-item img{
+    width: 90px;
+    height: 100px;
+}
+.item-hr{
+    margin-top: 2px;
+}
+.ord-item .item-span{
+    float: right;
+    margin-right: 150px;
+    margin-top:40px ;
+}
+.recDiv{
+    padding-top: 20px;
+    padding-left: 20px;
+}
+.recMsg{
+    float: left;
+}
+
+.recDiv button{
+    float: right;
+    width: 110px;
+    border-radius: 0;
+    margin-top: 40px;
+    margin-right: 20px;
+
+}
+.pay{
+    width: 200px;
+    height: 200px;
+    margin-top: 20px;
+    float: right;
+    margin-right: 20px;
+}
+.pay #priceTable{
+    text-align: right;
+    position: relative;
+}
+.pay span{
+    font-size: 11px;
+}
+.pay #priceTable td{
+    vertical-align:bottom
+}
+.pay #allPay{
+    color: #1baeae;
+    font-size: 30px;
+    padding-bottom: 0;
+
+
+}

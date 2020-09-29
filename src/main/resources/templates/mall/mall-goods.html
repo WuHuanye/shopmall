@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>商品搜索</title>
+    <link rel="stylesheet" th:href="@{/bootstrap/css/bootstrap.css}">
+    <script th:src="@{/pub/jquery-3.4.1.min.js}"></script>
+    <script th:src="@{/bootstrap/js/bootstrap-paginator.js}"></script><!--分页-->
+</head>
+<body>
+<header th:replace="fragment/header::header-fragment"></header>
+<style>
+    body{
+        margin: 0;
+        padding: 0;
+        background-color: #ecc1c9;
+        background: url('https://www.17sucai.com/preview/11/2015-09-20/css3%E6%82%AC%E5%81%9C/img/norwegian_rose.png');
+    }
+    .banner{
+        background: #dfdfdf;
+        height: 6%;
+        padding: 2% 10%;
+    }
+    .container{
+        margin-top: 0;
+    }
+    .goods{
+        box-shadow: 0 0 10px #a6aaaf;
+    }
+    .col-md-2{
+        width: 20%;
+        height: 260px;
+    }
+    .goodsImg{
+        width: 140px;
+    }
+    .caption{
+        text-align: center;
+    }
+    h3{
+        margin-top: 3px;
+    }
+    .goodIntro{
+        font-size: 13px;
+        width: 200px;
+        overflow:hidden;
+        text-overflow:ellipsis;
+        /*background: goldenrod;*/
+        white-space: nowrap;/*加宽度width属来兼容部分浏览*/
+    }
+    .goodsprice{
+        color: #7de6e4;
+        font-size: 15px;
+        margin-bottom: 3px;
+    }
+
+</style>
+<div class="banner" style="margin-top: 50px;">
+    <a href="#" onClick="javascript :history.back(-1);">返回</a>
+    排序&nbsp;&nbsp;|&nbsp;&nbsp;<a href="#">价格</a>
+</div>
+<div class="container">
+    <div class="row" style="position: relative">
+        <div class="col-xs-6 col-md-2" th:each="goods:${pageBean.list}">
+            <div class="thumbnail goods">
+                <a th:href="@{'/mall/mall-goods-detail?goodsId='+${goods.goodsId}}">
+                    <img class="goodsImg" th:src="${goods.goodsCoverImg}" src="/img/lunbo/1.jpg" alt="..." style="width: 140px;height: 140px">
+                </a>
+                <div class="caption">
+                    <h4 th:text="${goods.goodsName}">标题名称</h4>
+                    <span class="goodIntro" th:text="${goods.goodsIntro}">简介。。。</span><br>
+                    <span class="goodsprice" th:text="${goods.sellingPrice}">12</span><font style="font-size: 11px">元</font>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--bootstrap分页-->
+    <div class="bstpPage" style="margin-left: 600px">
+        <div style="margin-top: 100px;">
+            <ul id="page">
+            </ul>
+            <!--<ul>共<span th:text="${pageBean.totalCount}"></span></ul>-->
+        </div>
+    </div>
+
+    <script type="text/javascript">
+        $(function () {
+            var currentPage = [[${pageBean.currentPage}]];
+            var totalPages = [[${pageBean.totalPage}]];
+            $("#page").bootstrapPaginator({
+                bootstrapMajorVersion:3, //对应的bootstrap版本
+                currentPage: currentPage, //当前页数
+                numberOfPages: 10, //每次显示页数
+                totalPages:totalPages, //总页数
+                shouldShowPage:true,//是否显示该按钮
+                useBootstrapTooltip:true,
+                //点击事件：传给后台：当前页、每页大小、类型、商品名称
+                onPageClicked: function (currentPage, numberOfPages, type, page) {
+                    var oriUrl = location.href; //获取之前的url
+                    if (oriUrl.indexOf("page") >= 0){
+                        // alert("包含page")
+                        var split = oriUrl.split("=");  //截取的数组
+                        var newUrl = "";
+                        for (var i = 0;i < split.length - 1;i++){
+                            newUrl += split[i]+"=";
+                        }
+                        location.href = newUrl+page;
+                        return
+                    }else {
+                        //不包含直接拼接页码
+                        location.href = oriUrl + "&page="+page
+                    }
+                }
+            });
+
+        });
+    </script>
+
+</div>
+<!--尾部-->
+<footer th:replace="fragment/footer::footer-fragment"></footer>
+<script th:src="@{/bootstrap/js/bootstrap.js}"></script>
+</body>
+</html>

@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>用户购物车</title>
+    <link rel="stylesheet" th:href="@{/bootstrap/css/bootstrap.css}">
+    <link rel="stylesheet" th:href="@{/mall/mall-car/mall-car.css}">
+    <script th:src="@{/pub/jquery-3.4.1.min.js}"></script>
+
+</head>
+<body>
+<!--载入头部-->
+<header th:replace="fragment/header::header-fragment"></header>
+   <div class="container">
+       <div class="banner" style="margin-top: 50px;">
+           <a href="#" onClick="javascript :history.back(-1);">返回</a>
+       </div>
+       <style>
+            th td{
+                vertical-align: middle;
+                text-align: center;
+            }
+        </style>
+       <div style="overflow-y:scroll; overflow-x:hidden;height: 500px">
+           <table id="testTable" class="table table-condensed" style= "margin: 20px 20px; text-align: center">
+               <thead>
+               <tr>
+                   <th>图片</th>
+                   <th>商品名称</th>
+                   <th>单价</th>
+                   <th>数量</th>
+                   <th>小计</th>
+                   <th>操作</th>
+               </tr>
+               </thead>
+               <tbody>
+               <tr th:each="carItem:${cartItemVOs}">
+                   <td>
+                       <a th:href="@{'/mall/mall-goods-detail?goodsId='+${carItem.goodsId}}"><img th:src="${carItem.goodsCoverImg}" alt="" style="width:130px;height: 70px"></a>
+                   </td>
+                   <td th:text="${carItem.goodsName}">
+                       名称
+                   </td>
+                   <td th:text="${carItem.sellingPrice}">内容二</td>
+                   <td th:text="${carItem.goodsCount}">内容三</td>
+                   <td th:text="${carItem.goodsCount * carItem.sellingPrice}">内容四</td>
+                   <td><button class="btn btn-success" th:onclick="'javascript:delCarItem(\''+${carItem.carItemId}+'\')'">移除</button></td>
+               </tr>
+               <script>
+                   function delCarItem(carItemId) {
+                       // alert(carItemId)
+                       $.get("/mall/del_carItem",{carItemId:carItemId},function (json) {
+                           if(json == "success"){
+                               // alert("删除成功！")
+                               location.reload();
+                           }else {
+                               alert("删除失败")
+                           }
+                       })
+                   }
+               </script>
+
+               </tbody>
+           </table>
+       </div>
+
+        <div class="count">
+            <div style="float: left"><a th:href="@{/}">继续购物</a>&nbsp;&nbsp;|&nbsp;&nbsp;共<span style="font-size: 20px;color: #201bff" th:text="${allCount}">100</span>件</div>
+
+            <div style="float: right;margin-right: 20px;margin-bottom: 10px">合计：<span style="font-size: 20px;color: #5140ff" th:text="${totalPrice}">100</span>元&nbsp;&nbsp;&nbsp;<button onclick="settle()" class="btn btn-success disabled" style="width: 110px;border-radius: 0">结算</button></div>
+        </div>
+       <script>
+           function settle() {
+               location.href = "/settle";
+           }
+       </script>
+    </div>
+
+
+
+
+<!--载入尾部-->
+<div th:replace="fragment/footer::footer-fragment"></div>
+<script th:src="@{/bootstrap/js/bootstrap.js}"></script>
+
+
+</body>
+</html>

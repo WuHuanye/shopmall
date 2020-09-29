@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.example.demo.mapper.CarItemMapper">
+    <resultMap id="BaseResultMap" type="com.example.demo.pojo.CarItem">
+        <id column="car_item_id" jdbcType="INTEGER" property="carItemId"/>
+        <result column="user_id" jdbcType="INTEGER" property="userId"/>
+        <result column="goods_id" jdbcType="INTEGER" property="goodsId"/>
+        <result column="goods_count" jdbcType="INTEGER" property="goodsCount"/>
+        <result column="is_deleted" jdbcType="INTEGER" property="isDeleted"/>
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
+        <result column="update_time" jdbcType="TIMESTAMP" property="updateTime"/>
+    </resultMap>
+
+    <insert id="addCarItem" parameterType="com.example.demo.pojo.CarItem">
+        insert into shopmall.tb_cart_item (user_id, goods_id, goods_count, is_deleted, create_time, update_time) VALUES
+        (#{userId},#{goodsId},#{goodsCount},#{isDeleted},now(),now())
+    </insert>
+
+    <!--通过用户id查找购物车商品-->
+    <select id="queryCarItemsByUserId" parameterType="int" resultMap="BaseResultMap">
+        select * from shopmall.tb_cart_item where user_id = #{userId}
+    </select>
+
+    <delete id="delCarItemById" parameterType="int">
+        delete from shopmall.tb_cart_item where car_item_id = #{carItemId}
+    </delete>
+
+</mapper>

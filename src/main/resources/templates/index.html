@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SHOPMALL</title>
+</head>
+<link rel="stylesheet" th:href="@{/bootstrap/css/bootstrap.css}">
+<link rel="stylesheet" th:href="@{/index/index.css}">
+<script th:src="@{/pub/jquery-3.4.1.min.js}"></script>
+
+<body>
+<header th:replace="fragment/header::header-fragment"></header>
+    <div class="gif">
+        <img src="/img/component/烟花.gif" class="img-responsive gifimg" alt="">
+    </div>
+    <div id="carousel-example-generic" class="carousel slide" data-ride="carousel">
+        <!-- Indicators -->
+        <ol class="carousel-indicators">
+            <li data-target="#carousel-example-generic" data-slide-to="0" class="active"></li>
+            <li data-target="#carousel-example-generic" data-slide-to="1"></li>
+            <li data-target="#carousel-example-generic" data-slide-to="2"></li>
+        </ol>
+
+        <!-- Wrapper for slides -->
+        <div class="carousel-inner" role="listbox">
+            <div th:each="carousel,carouselStat:${carousels}" th:class="${carouselStat.index} eq 0 ? 'item active':'item'">
+              <a th:href="${carousel.redirectUrl}">
+                  <img th:src="${carousel.carouselUrl}" alt="...">
+              </a>
+              <div class="carousel-caption">
+              </div>
+            </div>
+        </div>
+        <!-- Controls -->
+        <a class="left carousel-control"  role="button"  href="#carousel-example-generic"data-slide="prev">
+            <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
+            <span class="sr-only">Previous</span>
+        </a>
+        <a class="right carousel-control" href="#carousel-example-generic" role="button" data-slide="next">
+            <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
+            <span class="sr-only">Next</span>
+        </a>
+    </div>
+    <span style="float: right;font-size: 12px">访问数：<font th:text="${accessCount}">5</font></span>
+    <!--热销-->
+    <div class="hotSell">
+        <h3>热销</h3>
+        <div class="row">
+            <div class="col-sm-6  col-xm-6 col-md-3" th:each="hostGood:${hostGoods}">
+                <div class="hostPro" style="background-color: #a6e1ec">
+                    <a th:href="@{'/mall/mall-goods-detail?goodsId='+${hostGood.goodsId}}">
+                        <img th:src="${hostGood.goodsCoverImg}" src="/img/lunbo/1.jpg" alt="...">
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="indexShow">
+        <!--新品-->
+        <div class="newProduct">
+            <h3>新品</h3>
+            <div class="row">
+                <div class="col-sm-6 col-md-2" th:each="newGood:${newGoods}">
+                    <div class="thumbnail">
+                        <div class="toptext" th:text="${newGood.tag}">
+                            良品铺子
+                        </div>
+                        <a th:href="@{'/mall/mall-goods-detail?goodsId='+${newGood.goodsId}}">
+                            <!--<img src="/img/lunbo/1.jpg" alt="...">-->
+                            <img th:src="${newGood.goodsCoverImg}" src="/img/lunbo/1.jpg" alt="..." style="width: 230px;height: 220px;margin-top: 10px">
+                        </a>
+                        <div class="captionNew">
+                            <h3 th:text="${newGood.goodsName}">标题名称</h3>
+                            <!--<p th:text="${newGood.goodsIntro}">简介。。。</p>
+                            <span th:text="${newGood.sellingPrice}">价格</span>-->
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+        <!--推荐-->
+        <style>
+            .p1{
+                width: 200px;
+                overflow:hidden;
+                text-overflow:ellipsis;
+                /*background: goldenrod;*/
+                white-space: nowrap;/*加宽度width属来兼容部分浏览*/
+            }
+        </style>
+        <div class="newProduct">
+            <h3>为你推荐</h3>
+            <div class="row">
+                <div class="col-sm-6 col-md-2" th:each="recommendGood:${recommendGoods}">
+                    <div class="thumbnail">
+                        <a th:href="@{'/mall/mall-goods-detail?goodsId='+${recommendGood.goodsId}}">
+                            <img th:src="${recommendGood.goodsCoverImg}" src="/img/lunbo/1.jpg" alt="..." style="width: 220px;height: 200px;margin-top: 2px">
+                        </a>
+                        <div class="caption">
+                            <h4 th:text="${recommendGood.goodsName}" style="color: rgb(255,148,0);">标题名称</h4>
+                            <p th:text="${recommendGood.goodsIntro}" class="p1">简介。。。</p>
+                            <span th:text="${recommendGood.sellingPrice}">价格</span>元
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+<!--尾部-->
+<footer th:replace="fragment/footer::footer-fragment"></footer>
+<script th:src="@{/bootstrap/js/bootstrap.js}"></script>
+<script th:src="@{/index/index.js}"></script>
+</body>
+</html>

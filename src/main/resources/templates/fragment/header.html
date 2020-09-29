@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+    <html lang="en" xmlns:th="http://www.thymeleaf.org">
+    <body>
+    <header id="header" th:fragment="header-fragment">
+    <link rel="stylesheet" th:href="@{/fragment/header.css}"><!--置于header下才能被加载-->
+
+    <div class="row head">
+        <!--navbar-inverse:导航栏颜色为反色 navbar-fixed-top：固定在顶部 -->
+        <nav class="navbar navbar-inverse navbar-fixed-top">
+            <!--container：内容居中  -->
+            <div class="container">
+                <div class="navbar-header">
+                    <!-- 点击该按钮实现折叠和展开 -->
+                    <button class="navbar-toggle" data-toggle="collapse" data-target="#res-bar">
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                    <a th:href="@{/}" class="navbar-brand"><img th:src="${user.logoUrl}" id="logo"></a>
+                </div>
+                <style>
+                    #logo{
+                        width: 70px;
+                        height: 40px;
+                        position: absolute;
+                        top: 8px;
+                    }
+                    #res-bar{
+                        margin-left: 90px;
+                    }
+                    #headA{
+                        margin-top: 2px;
+                        padding: 8px;
+                    }
+                    #headImg{
+                        width: 30px;
+                        height: 30px;
+                        border-radius: 50px;
+                    }
+                </style>
+                <!-- 实现折叠：便于在手机屏展示 collapse -->
+                <div class="collapse navbar-collapse" id="res-bar">
+                    <ul class="nav navbar-nav">
+                        <li role="presentation" class="dropdown" th:each="dictMap,dictStart:${user.dictMap}">
+                            <!--<a th:text="${dictMap.value[1].pid==1370} ? '鞋子':'衣服'" class="dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
+                                 <span class="caret"></span>
+                            </a>-->
+                            <a th:text="${dictStart.current.key}" class="dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
+                                 <span class="caret"></span>
+                            </a>
+                            <ul class="dropdown-menu">
+                                <li th:each="dict:${dictMap.value}">
+                                    <a th:text="${dict.value}" th:href="@{'/mall/searchGoods?typeId='+${dict.id}}" href="/mall/searchGoods?typeId=1369">男衣</a>
+                                </li>
+                            </ul>
+                        </li>
+                    </ul>
+                    <form th:action="@{/mall/searchGoods}" class="navbar-form navbar-left">
+                        <input type="text" placeholder="输入商品名称" class="form-control" name="goodsName" id="keyWord">
+                        <button type="submit">
+                            <span class="glyphicon glyphicon-search"></span>
+                        </button>
+                    </form>
+                    <ul class="nav navbar-nav navbar-right" th:if="${user.userId}==0">
+                        <li><a href="#" data-toggle="modal" data-target="#register">注册</a></li>
+                        <li><a href="#" data-toggle="modal" data-target="#login">登录</a></li>
+                    </ul>
+                    <ul class="nav navbar-nav navbar-right" th:if="${user.userId}!=0">
+                        <li><a href="#" id="headA"><img th:src="${user.headUrl}" src="" alt="头像" id="headImg"></a></li>
+                        <li class="dropdown">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><strong style="color: #00FFFF">[[${user.nickName}]]</strong>&nbsp;<span class="caret"></span></a>
+                            <ul class="dropdown-menu">
+                                <li><a href="#" data-toggle="modal" data-target="#personCenter">个人中心</a></li>
+                                <li><a href="#" data-toggle="modal" data-target="#editPsw">修改密码</a></li>
+                                <li><a th:href="@{/mall/mall_car}">购物车</a></li>
+                                <li><a href="#" data-toggle="modal" data-target="#infoForm">留言建议</a></li>
+                                <li role="separator" class="divider"></li>
+                                <li><a href="/user/quit">拜拜</a></li>
+                            </ul>
+                        </li>
+                        <li th:if="${user.roleId}==1"><a th:href="@{/admin}" id="mes">管理</a></li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+        <!--密码修改模态框-->
+        <div class="modal fade" id="editPsw" tabindex="-1">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <!-- data-dismiss关闭当前modal对话框 -->
+                        <button class="close" data-dismiss="modal">&times;</button>
+                        <h4>密码修改</h4>
+                    </div>
+                    <div class="modal-body">
+                        <form id="pswForm" action="/user/login">
+                            <!--<label>旧密码</label>
+                            <input type="text" class="form-control" name="oldPsw" id="oldPsw">-->
+                            <label>新密码</label>
+                            <input type="text" class="form-control" name="newPsw" id="newPsw">
+                            <label>确认新密码</label>
+                            <input type="text" class="form-control" name="newPsw" id="okNewPsw">
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button class="btn btn-primary" data-dissmiss="modal" onclick="editPsw()">确认</button>
+                        <button class="btn btn-primary" data-dismiss="modal" onclick="formReset()">取消</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <script>
+            function editPsw() {
+                var newPsw = $("#newPsw").val();
+                var okNewPsw = $("#okNewPsw").val();
+                if(newPsw!=okNewPsw){
+                    alert("密码输入不一致，请重新输入")
+                    $("#pswForm")[0].reset();
+                    return
+                }
+                $.ajax({
+                    url:"/user/editPsw",
+                    type:"POST",
+                    data:{newPsw:newPsw},
+                    dataType:"text",
+                    success:function (json) {
+                        if(json=="success"){
+                            alert("修改成功")
+                            location.href = "/user/quit";
+                            return
+                        }else {
+                            alert("原密码错误，请重新输入")
+                            $("#pswForm")[0].reset();
+                            return
+                        }
+                    }
+                })
+            }
+            function formReset() {
+                $("#pswForm")[0].reset();
+            }
+        </script>
+
+        <!--个人中心模态框-->
+        <div class="modal fade" id="personCenter" tabindex="-1" th:if="${user}!=null">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button class="close" data-dismiss="modal">&times;</button>
+                        <h4>个人中心</h4>
+                    </div>
+                    <div class="modal-body">
+                        <form action="" id="userCenterForm">
+                            <style>
+                                #sss{
+                                    position: relative;
+                                    left: 40%;
+                                }
+                                #sss img{
+                                    width: 100px;
+                                    height: 100px;
+                                    border-radius: 100px;
+                                }
+                                .acc_sc{
+                                    margin-left: 340px;
+                                }
+                            </style>
+                            <!--头像-->
+                            <div class="acc_img">
+                                <div id="sss">
+                                    <img class="acc_imgin" th:src="${user.headUrl}" id="img0">
+                                </div>
+                                <div class="acc_sc">
+                                    <input style="cursor: pointer"
+                                           type="file" name="file0" id="file0" multiple class="ph08"
+                                           accept="image/png, image/jpg, image/jpeg, image/bmp"/>
+                                </div>
+                            </div>
+                            <!--<label>id</label>
+                            <input type="text" class="form-control" name="userId" id="userId" th:value="${user.userId}">-->
+                            <label>用户名</label>
+                            <input type="text" class="form-control" name="username" id="username" th:value="${user.username}"  readonly="true">
+                            <label>昵称</label>
+                            <input type="text" class="form-control" name="username" id="nickName" th:value="${user.nickName}">
+                            <label>邮箱</label>
+                            <input type="text" class="form-control" name="email" id="email" th:value="${user.email}">
+                            <label>生日</label>
+                            <input type="date" class="form-control" name="birthday" id="birthday"  th:value="${#dates.format(user.birthday,'yyyy-MM-dd')}" required="required">
+                            <label>性别</label>
+                            <select type="text" class="form-control" name="sex" id="sex">
+                                <option th:value="1" th:selected="${user.sex}==1" class="form-control" value="">男</option>
+                                <option th:value="0" th:selected="${user.sex}==0" class="form-control" value="">女</option>
+                            </select>
+                        </form>
+                    </div>
+                    <div class="modal-footer" style="margin-top: 40px">
+                        <button class="btn btn-primary" data-dismiss="modal" onclick="editUserCenter()">保存</button>
+                        <button data-dismiss="modal" class="btn btn-primary">取消</button>
+                    </div>
+                </div>
+            </div>
+            <script>
+                function getObjectURL(file) {
+                    var url = null;
+                    if (window.createObjectURL != undefined) { // basic
+                        url = window.createObjectURL(file);
+                    } else if (window.URL != undefined) { // mozilla(firefox)
+                        url = window.URL.createObjectURL(file);
+                    } else if (window.webkitURL != undefined) { // webkit or chrome
+                        url = window.webkitURL.createObjectURL(file);
+                    }
+                    return url;
+                }
+                $("#file0").change(function () {
+                    if (this.files && this.files[0]) {
+                        var objUrl = getObjectURL(this.files[0]);
+                        console.log("objUrl = " + objUrl);
+                        if (objUrl) {
+                            $("#img0").attr("src", objUrl);
+                            $("#file0").click(function (e) {
+                                $("#img0").attr("src", objUrl);
+                            });
+                        } else {
+                            //IE下，使用滤镜
+                            this.select();
+                            var imgSrc = document.selection.createRange().text;
+                            var localImagId = document.getElementById("sss");
+                            //图片异常的捕捉，防止用户修改后缀来伪造图片
+                            try {
+                                preload.filters.item("DXImageTransform.Microsoft.AlphaImageLoader").src = data;
+                            } catch (e) {
+                                this._error("filter error");
+                                return;
+                            }
+                            this.img.style.filter = "progid:DXImageTransform.Microsoft.AlphaImageLoader(sizingMethod='scale',src=\"" + data + "\")";
+                        }
+                    }
+                });
+                function editUserCenter() {
+                    var formData = new FormData();
+                    // var userId = $("#userId")
+                    var nickName = $("#nickName").val();
+                    var email = $("#email").val();
+                    var birthday = $("#birthday").val();
+                    var sex = $("#sex").val();
+                    var headPicFile = document.getElementById("file0").files[0];     //得到图片对象，传递到后台用multipartFile接收
+                    var fileSize = headPicFile.size;
+                    if (fileSize / 1024 > 5000){
+                        //上传图片不能超过6兆
+                        alert("图片不能超过5兆")
+                        return
+                    }
+                    formData.append("nickName",nickName);
+                    formData.append("email",email);
+                    formData.append("headPicFile",headPicFile);
+                    formData.append("birthday",birthday);
+                    formData.append("sex",sex);
+                    $.ajax({
+                        url:"/user/editUserCenter",
+                        data:formData,
+                        type:"POST",
+                        dataType:"text",
+                        processData: false,
+                        contentType: false,
+                        success:function (json) {
+                            if(json == "success"){
+                                alert("更改成功")
+                                location.href = "/";
+                                return
+                            }else {
+                                alert("更改失败")
+                            }
+                        }
+                    })
+                }
+            </script>
+        </div>
+        <!-- 对话框 tabindex:实现tab键的友好操作  fade:对话框渐入式动画-->
+        <!--载入登录表单-->
+        <div th:replace="fragment/login-form::login-fragment"></div>
+        <!--载入注册表单-->
+        <div th:replace="fragment/register-form::register-fragment"></div>
+
+    </div>
+</header>
+</body>
+</html>

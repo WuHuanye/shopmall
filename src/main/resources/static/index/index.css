@@ -1,0 +1,106 @@
+body{
+    background-color: white;
+    background: url('https://www.17sucai.com/preview/11/2015-09-20/css3%E6%82%AC%E5%81%9C/img/norwegian_rose.png');
+    margin: 5% auto;
+    /*padding: 100px;*/
+    width: 90%;
+
+}
+
+.gif{
+    /*border: 1px solid red;*/
+    width: 20%;
+    height: 30%;
+    float: left;
+}
+.gifimg{
+    width: 100%;
+    height: 220px;
+}
+
+.carousel{
+    width: 80%;
+    height: 30%;
+    float: left;
+
+}
+#carousel-example-generic img{
+    width: 1400px;
+    height: 220px;
+}
+.hotSell{
+    /*如何让其具有立体感*/
+    background-color: #d4ddea;
+    margin-top: 240px;
+    padding: 12px;
+    box-shadow: 0 0 10px #a6aaaf;
+}
+.hostPro{
+    width: 280px;
+    height:343px;
+    padding: 3px;
+}
+.hostPro img{
+    width: 273px;
+    height: 338px;
+}
+.indexShow{
+    background-color: #d4ddea;
+    margin-top: 50px;
+    padding: 12px;
+    box-shadow: 0 0 10px #a6aaaf;
+}
+
+.col-md-2{
+    width: 20%;
+}
+
+.thumbnail{
+    position: relative;
+    height:300px ;
+
+}
+.thumbnail .toptext{
+    position: absolute;
+    background-color: red;
+    width: 110px;
+    height: 20px;
+    left: 63px;
+    text-align: center;
+    font-size: 12px;
+    color: white;
+
+
+}
+.thumbnail .caption{
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 233px;
+    height: 100px;
+    background: rgba(255, 234, 232, 0.5);
+    text-align: center;
+    /*border-radius: 4px;*/
+}
+.captionNew{
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 233px;
+    height: 70px;
+    background: rgba(171, 255, 255, 0.5);
+    text-align: center;
+    /*border-radius: 4px;*/
+}
+.captionNew h3{
+    color: #4cded2;
+    /*text-shadow: #ff005e 5px 3px 3px;*/
+}
+
+.caption p{
+    color: #ff8755;
+}
+.caption span{
+    color: #ffb999;
+    font-size: 15px;
+}

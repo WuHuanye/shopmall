@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<body>
+    <footer class="site-footer" id="footer" th:fragment="footer-fragment">
+        <div class="modal fade" id="infoForm" tabindex="-1">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <!-- data-dismiss关闭当前modal对话框 -->
+                        <button class="close" data-dismiss="modal">&times;</button>
+                        <h4>用户留言</h4>
+                    </div>
+                    <div class="modal-body">
+                        <form id="loginForm" action="/user/sendInfo">
+                            <label>内容</label>
+                            <textarea type="text" placeholder="登录才能留言哟~"  class="form-control" th:disabled="${user.userId==0}" name="content" id="content"></textarea>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button class="btn btn-primary" onclick="sendInfo()">确定</button>
+                        <button class="btn btn-primary" data-dismiss="modal">取消</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <link rel="stylesheet" th:href="@{/fragment/footer.css}">
+        <div class="footer-related">
+            <div class="footer-article w1100">
+                <dl class="contact clearfix">
+                    <dt class="fl">
+                        <i class="iconfont"></i>
+                    </dt>
+                    <dd class="fl">
+                        <p class="tel">系统留言</p>
+                        <p class="text" style="font-size: 12px">欢迎留言建议~</p>
+                        <a href="#" data-toggle="modal" data-target="#infoForm">留言反馈</a>
+                    </dd>
+                </dl>
+                <dl class="col-article">
+                    <dt>电商产品</dt>
+                    <dd><a rel="nofollow" href="#" target="_blank">云小店</a></dd>
+                    <dd><a rel="nofollow" href="#" target="_blank">品牌商城</a></dd>
+                    <dd><a rel="nofollow" href="#" target="_blank">产品介绍</a></dd>
+                </dl>
+                <dl class="col-article">
+                    <dt>关注我们</dt>
+                    <dd><a rel="nofollow" href="#" target="_blank">官方微博</a></dd>
+                    <dd><a rel="nofollow" href="#" target="_blank">官方微信</a></dd>
+                </dl>
+                <dl class="col-article">
+                    <dt>帮助中心</dt>
+                    <dd><a rel="nofollow" href="#" target="_blank">新手入门</a>
+                    </dd>
+                    <dd><a rel="nofollow" href="#" target="_blank">更新日志</a></dd>
+                </dl>
+                <dl class="col-article">
+                    <dt>关于shopmall</dt>
+                    <dd><a rel="nofollow" href="#" target="_blank">了解shopmall</a>
+                    </dd>
+                    <dd><a rel="nofollow" href="#" target="_blank">加入shopmall</a>
+                    </dd>
+                    <dd><a rel="nofollow" href="#" target="_blank">捐赠维护</a>
+                    </dd>
+                </dl>
+
+                <dl class="wx">
+                    <dt>shopmall</dt>
+                    <dd>
+                        <img src="http://139.199.157.189/shopmall/sys/sys_LINK.jpg">
+                    </dd>
+                </dl>
+                <!--<iframe frameborder="no" border="0" marginwidth="no" marginheight="no" width=280 height=127
+                        src="//music.163.com/outchain/player?type=2&id=497034035&auto=1&height=66" >
+                </iframe>-->
+            </div>
+            <div class="footer-info w1100">
+                <div class="info-text w1100">
+                    <p><a href="#" target="_blank">Copyright © 2019-2020 Mr.Ye  All
+                        Rights
+                        Reserved.&nbsp; | &nbsp; 京ICP备12323232号-6 </a></p>
+                    <p style="color: #1baeae">每一天都是新开始，欧耶~</p>
+                </div>
+            </div>
+        </div>
+        <script>
+            function sendInfo() {
+                var content = $("#content").val();
+                $.post("/user/sendInfo",{content:content},function (json) {
+                    if(json == "success"){
+                        alert("感谢您的留言！")
+                        $("#infoForm").modal("hide");   //关闭模态框
+                        return
+                    }
+                })
+            }
+        </script>
+    </footer>
+</body>
+
+</html>

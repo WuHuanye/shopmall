@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.example.demo.mapper.GoodsDetailImgMapper">
+    <resultMap id="BaseResultMap" type="com.example.demo.pojo.GoodsDetailImg">
+        <id column="id" jdbcType="INTEGER" property="id"/>
+        <result column="goods_id" jdbcType="VARCHAR" property="goodsId"/>
+        <result column="img_url" jdbcType="VARCHAR" property="imgUrl"/>
+
+    </resultMap>
+    <insert id="add" parameterType="com.example.demo.pojo.GoodsDetailImg">
+        insert into shopmall.tb_goods_detail_img (goods_id, img_url) values (#{goodsDetailImg.goodsId},#{goodsDetailImg.imgUrl})
+    </insert>
+
+    <select id="queryGoodsImgDetail" parameterType="int" resultMap="BaseResultMap">
+        select * from shopmall.tb_goods_detail_img where id = #{id}
+    </select>
+
+    <select id="queryGoodsImgDetailListByGoodsId" parameterType="int" resultMap="BaseResultMap">
+        select * from shopmall.tb_goods_detail_img where goods_id = #{goodsId}
+    </select>
+</mapper>

@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>商品详情</title>
+    <link rel="stylesheet" th:href="@{/bootstrap/css/bootstrap.css}">
+    <link rel="stylesheet"th:href="@{/mall/mall-product-detail/mall-product-detail.css}">
+    <script th:src="@{/pub/jquery-3.4.1.min.js}"></script>
+    <script th:src="@{/mall/mall-product-detail/mall-product-detail.js}"></script>
+    <!--评论-->
+    <link rel="stylesheet" th:href="@{/comment/style.css}">
+    <link rel="stylesheet" th:href="@{/comment/comment.css}">
+    <script type="text/javascript" th:src="@{/comment/jquery.flexText.js}" src="https://www.jsdaima.com/Uploads/js/201705/1495781184/jquery.flexText.js"></script>
+
+</head>
+<body>
+
+<!--载入头部-->
+<header th:replace="fragment/header::header-fragment"></header>
+
+<div class="top">
+    <a href="#" onClick="javascript :history.back(-1);" style="margin-left: 160px">返回</a>
+
+    <span th:text="${goods.goodsId}" id="goodsId" style="display: none">商品id（隐藏）</span>
+    <div class="prosum_box">
+        <dl class="prosum_left">
+            <dt id="dt">
+                <img alt="" class="big_img" th:src="${goodsDetailImgs[0].imgUrl}">
+            </dt>
+            <dd id="dd">
+                <a class="up_img up_img_disable"></a>
+                <a th:each="goodsDetailImg:${goodsDetailImgs}" title="" class="little_img" th:data-bigpic="${goodsDetailImg.imgUrl}">
+                    <img th:src="${goodsDetailImg.imgUrl}">
+                </a>
+                <a class="down_img down_img_disable" style="margin-bottom: 0;"></a>
+            </dd>
+        </dl>
+        <div class="prosum_right">
+            <h2 th:text="${goods.goodsName}">Apple iPhone 11 (A2223)</h2>
+            <h5 th:text="${goods.goodsIntro}">256GB 绿色 移动联通电信4G手机 双卡双待</h5>
+
+            <div class="price">
+                <label class="now" th:text="${goods.sellingPrice}">6799.00 </label>元&nbsp;&nbsp;
+                <del class="org" th:text="${goods.originalPrice}">6799.00</del>元
+            </div>
+            <div class="btnn">
+                <button class="btn btn-success btn1 disabled" onclick="buy()">立即选购</button>
+                <button class="btn btn-success btn2">加入购物车</button>
+                <select name="goodsCount" id="goodsCount" class="btn btn-success sel">
+                    <option value="1" selected>1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                </select>
+            </div>
+        </div>
+    </div>
+    <script>
+        $(".btn2").click(function () {
+            var goodsId = $("#goodsId").text();
+            var goodsCount = $("#goodsCount").val()
+            // alert(goodsCount)
+            // location.href = "/mall/mall_goods_addToCar?goodsId="+goodsId;
+            $.ajax({
+                url:"/mall/mall_goods_addToCar",
+                type:"POST",
+                data:{goodsId:goodsId,goodsCount:goodsCount},
+                dataType:"text",
+                success:function (json) {
+                    if(json == "success"){
+                        // alert("加入成功")
+                        location.href = "/mall/mall_car";
+                        return
+                    }else {
+                        alert("请先登录")
+                    }
+                }
+
+            })
+        });
+
+        function buy() {
+            location.href = "/a";
+        }
+    </script>
+    <style>
+        .panel{
+            position: relative;
+            top: 10px;
+            left: 160px;
+            width: 1200px;
+        }
+    </style>
+    <!--1、简单的介绍-->
+    <div class="panel panel-default panel-info">
+        <div class="panel-heading">
+            <h3 class="panel-title">产品简介</h3>
+        </div>
+        <div class="panel-body" th:text="${goods.goodsIntro}">
+            好产品，格力造。。。
+        </div>
+    </div>
+    <!--2、评论区-->
+    <div class="commentAll" style="background: url('https://www.17sucai.com/preview/11/2015-09-20/css3%E6%82%AC%E5%81%9C/img/norwegian_rose.png')">
+        <!--评论区域 begin-->
+        <div class="reviewArea clearfix">
+            <textarea class="content comment-input" placeholder="是否要留下您的足迹呢？&hellip;" onkeyup="keyUP(this)"></textarea>
+            <a th:if="${user.userId} != 0" href="javascript:;"  class="plBtn">评论</a>
+        </div>
+        <!--评论区域 end-->
+        <!--回复区域 begin-->
+        <!--评论-->
+        <div style="overflow-y:scroll; overflow-x:hidden;height: 400px" class="comment-show">
+            <div class="comment-show-con clearfix" th:each="comment,commentStart:${commentList}" th:id="${comment.id}">
+                <!--<span th:text="${comment.userId}" id="commentId" style="color: red"></span>-->
+                <!--<span th:text="${user.userId}"  style="color: red"></span>--><!--用户id和评论的用户id一样时，显示可删除-->
+                <div class="comment-show-con-img pull-left">
+                    <img th:src="${comment.userHeadUrl}" src="https://www.jsdaima.com/Uploads/js/201705/1495781184/header-img-comment_03.png" alt="用户头像" style="width: 48px;height: 48px;border-radius: 48px">
+                </div>
+                <div class="comment-show-con-list pull-left clearfix">
+                    <div class="pl-text clearfix">
+                        <a href="#" class="comment-size-name" th:if="${comment.userId} != ${user.userId}" th:text="${comment.userNickName}">用户昵称 : </a>
+                        <a href="#" class="comment-size-name" th:if="${comment.userId} eq ${user.userId}">【我】: </a>
+                        <span class="my-pl-con" th:text="${comment.content}">&nbsp;用户评论了这句话</span>
+                    </div>
+                    <div class="date-dz">
+                        <span class="date-dz-left pull-left comment-time" th:text="${#dates.format(comment.createDate,'yyyy-MM-dd HH:mm:ss')}">2017-5-2 11:11:39</span>
+                        <div class="date-dz-right pull-right comment-pl-block">
+                            <a th:if="${user.userId} eq ${comment.userId} or ${user.roleId} eq 1" th:data-id="${comment.id}" href="javascript:;" class="removeBlock">删除</a>
+                            <a th:if="${user.userId}!=0" th:data-cid="${comment.id}" href="javascript:;" class="date-dz-pl pl-hf hf-con-block pull-left ">回复</a>
+                            <span class="pull-left date-dz-line">|</span>
+                            <a href="javascript:;" class="date-dz-z pull-left" th:data-rid="${comment.id}" data-type="pl">
+                                <i th:data-rid="${comment.id}" class="date-dz-z-click-red"></i>赞 (<i class="z-num" th:data-rid="${comment.id}">[[${comment.likeCount}]]</i>)
+                            </a>
+                        </div>
+                    </div>
+                    <!--评论下的所有回复-->
+                    <div class="hf-list-con">
+                        <div th:if="${revertMap!=null}">
+                            <div th:each="revert,revertStart:${revertMap[comment.id+'']}" class="all-pl-con"><!--相当于遍历list-->
+                                <div class="pl-text hfpl-text clearfix">
+                                    <a href="#" class="comment-size-name" th:if="${revert.userId} eq ${user.userId}">【我】: </a>
+                                    <a href="#" class="comment-size-name" th:if="${revert.userId} != ${user.userId}" th:text="${revert.userNickName}"> </a>
+                                    <span class="my-pl-con" th:text="${revert.revertContent}">回复内容</span>
+                                </div><div class="date-dz">
+                                    <span class="date-dz-left pull-left comment-time" th:text="${#dates.format(revert.revertDate,'yyyy-MM-dd HH:mm:ss')}" >2020-9-8 16:18:59</span>
+                                    <div class="date-dz-right pull-right comment-pl-block">
+                                        <a href="javascript:;" th:if="${user.userId} eq ${revert.userId} or ${user.roleId} eq 1" th:data-id="${revert.id}" class="removeBlock">删除</a>
+                                        <a th:data-cid="${comment.id}" href="javascript:;" class="date-dz-pl pl-hf hf-con-block pull-left">回复</a>
+                                        <span class="pull-left date-dz-line">|</span>
+                                        <a href="javascript:;" class="date-dz-z pull-left" th:data-rid="${revert.id}" data-type="hf">
+                                        <i class="date-dz-z-click-red" th:data-rid="${revert.id}"></i>赞 (<i class="z-num" th:data-rid="${revert.id}">[[${revert.likeCount}]]</i>)
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--回复区域 end-->
+    </div>
+    <!--全局变量，获得当前用户的头像地址-->
+    <script th:inline="javascript">
+        var headUrl = [[${user.headUrl}]];
+    </script>
+    <!--评论-->
+    <!--textarea高度自适应-->
+    <script type="text/javascript">
+        $(function () {
+            $('.content').flexText();
+        });
+    </script>
+    <!--textarea限制字数-->
+    <script type="text/javascript">
+        function keyUP(t){
+            var len = $(t).val().length;
+            if(len > 139){
+                $(t).val($(t).val().substring(0,140));
+            }
+        }
+    </script>
+    <!--点击评论创建评论条-->
+    <script type="text/javascript">
+        //获得后台返回的评论及回复
+        /*var commentList = [[${commentList}]];
+        var revertMap = [[${revertMap}]];*/
+        $('.commentAll').on('click','.plBtn',function(){
+            var myDate = new Date();
+            //获取当前年
+            var year=myDate.getFullYear();
+            //获取当前月
+            var month=myDate.getMonth()+1;
+            //获取当前日
+            var date=myDate.getDate();
+            var h=myDate.getHours();       //获取当前小时数(0-23)
+            var m=myDate.getMinutes();     //获取当前分钟数(0-59)
+            if(m<10) m = '0' + m;
+            var s=myDate.getSeconds();
+            if(s<10) s = '0' + s;
+            var now=year+'-'+month+"-"+date+" "+h+':'+m+":"+s;
+            //获取输入内容
+            var oSize = $(this).siblings('.flex-text-wrap').find('.comment-input').val();
+            // alert(oSize);
+            $.ajax({
+                type:"POST",
+                url:"/user/comment/addComment",
+                data:{content:oSize,goodsId:$("#goodsId").text()},
+                dataType:"text",
+                success:function (json) {
+                    if (json == "error"){
+                        alert("请先登录")
+                        return
+                    }
+                }
+            });
+            /*alert(headUrl);
+            return*/
+            //动态创建评论模块
+            oHtml = '<div class="comment-show-con clearfix"><div class="comment-show-con-img pull-left"><img  src="'+headUrl+'" alt="用户头像" style="width: 48px;height: 48px;border-radius: 48px"></div> ' +
+                '<div class="comment-show-con-list pull-left clearfix"><div class="pl-text clearfix"> <a href="#" class="comment-size-name">【我】 : </a> <span class="my-pl-con">&nbsp;'+ oSize +'</span> </div> <div class="date-dz"> <span class="date-dz-left pull-left comment-time">'+now+'</span> <div class="date-dz-right pull-right comment-pl-block"><a href="javascript:;" class="removeBlock">删除</a> <a href="javascript:;" class="date-dz-pl pl-hf hf-con-block pull-left">回复</a> <span class="pull-left date-dz-line">|</span> <a href="javascript:;" class="date-dz-z pull-left"><i class="date-dz-z-click-red"></i>赞 (<i class="z-num">0</i>)</a> </div> </div><div class="hf-list-con"></div></div> </div>';
+            if(oSize.replace(/(^s*)|(s*$)/g, "") != ''){
+                $(this).parents('.reviewArea ').siblings('.comment-show').prepend(oHtml);
+                $(this).siblings('.flex-text-wrap').find('.comment-input').prop('value','').siblings('pre').find('span').text('');
+            }
+        });
+    </script>
+    <!--点击回复动态创建回复块-->
+    <script type="text/javascript">
+        $('.comment-show').on('click','.pl-hf',function(){
+            var cid = $(this).data('cid');        //获得回复的评论或者回复的id
+
+            //获取回复人的名字
+            var fhName = $(this).parents('.date-dz-right').parents('.date-dz').siblings('.pl-text').find('.comment-size-name').html();
+            //回复@
+            // var fhN = '回复@'+fhName;  //取消@用户的记录
+            //var oInput = $(this).parents('.date-dz-right').parents('.date-dz').siblings('.hf-con');
+            var fhHtml = '<div class="hf-con pull-left"> <textarea class="content comment-input hf-input" placeholder="" onkeyup="keyUP(this)"></textarea>' +
+                ' <a data-cid="'+cid+'" href="javascript:;" class="hf-pl">回复</a></div>';
+            //显示回复
+            if($(this).is('.hf-con-block')){
+                $(this).parents('.date-dz-right').parents('.date-dz').append(fhHtml);
+                $(this).removeClass('hf-con-block');
+                $('.content').flexText();
+                $(this).parents('.date-dz-right').siblings('.hf-con').find('.pre').css('padding','6px 15px');
+                //console.log($(this).parents('.date-dz-right').siblings('.hf-con').find('.pre'))
+                //input框自动聚焦
+                $(this).parents('.date-dz-right').siblings('.hf-con').find('.hf-input').val('').focus().val(fhN);
+            }else {
+                $(this).addClass('hf-con-block');
+                $(this).parents('.date-dz-right').siblings('.hf-con').remove();
+            }
+        });
+    </script>
+    <!--评论回复块创建-->
+    <script type="text/javascript">
+        $('.comment-show').on('click','.hf-pl',function(){
+            var id = $(this).data('cid');        //获得回复的评论的
+            console.log("获得回复的评论的::"+id)
+            var oThis = $(this);
+            var myDate = new Date();
+            //获取当前年
+            var year=myDate.getFullYear();
+            //获取当前月
+            var month=myDate.getMonth()+1;
+            //获取当前日
+            var date=myDate.getDate();
+            var h=myDate.getHours();       //获取当前小时数(0-23)
+            var m=myDate.getMinutes();     //获取当前分钟数(0-59)
+            if(m<10) m = '0' + m;
+            var s=myDate.getSeconds();
+            if(s<10) s = '0' + s;
+            var now=year+'-'+month+"-"+date+" "+h+':'+m+":"+s;
+            //获取输入内容
+            var oHfVal = $(this).siblings('.flex-text-wrap').find('.hf-input').val();
+            console.log(oHfVal)
+            var oHfName = $(this).parents('.hf-con').parents('.date-dz').siblings('.pl-text').find('.comment-size-name').html();
+            //var oAllVal = '回复@'+oHfName;//      || oHfVal == oAllVal      不要回复的对象
+            if(oHfVal.replace(/^ +| +$/g,'') == ''){
+                return
+            }else {
+                // alert("要回复的评论或者回复的id为：：："+id)
+                $.ajax({
+                    type:"POST",
+                    url:"/user/comment/addRevert",
+                    data:{revertContent:oHfVal,cid:id},
+                    dataType:"text",
+                    success:function (json) {
+                        if (json != "success"){
+                            alert("请先登录")
+                            location.reload()
+                            return
+                        }
+                    }
+                })
+                var oHtml = '<div class="all-pl-con"><div class="pl-text hfpl-text clearfix"><a href="#" class="comment-size-name">【我】：</a>' +
+                    '<span class="my-pl-con">'+oHfVal+'</span></div><div class="date-dz"> ' +
+                    '<span class="date-dz-left pull-left comment-time">'+now+'</span> ' +
+                    '<div class="date-dz-right pull-right comment-pl-block"> <a href="javascript:;" class="removeBlock">删除</a> ' +
+                    '<a href="javascript:;" class="date-dz-pl pl-hf hf-con-block pull-left">回复</a>' +
+                    ' <span class="pull-left date-dz-line">|</span> <a href="javascript:;" class="date-dz-z pull-left">' +
+                    '<i class="date-dz-z-click-red"></i>赞 (<i data-cid="" class="z-num">0</i>)</a> ' +
+                    '</div> </div></div>';
+                oThis.parents('.hf-con').parents('.comment-show-con-list').find('.hf-list-con').css('display','block').prepend(oHtml) && oThis.parents('.hf-con').siblings('.date-dz-right').find('.pl-hf').addClass('hf-con-block') && oThis.parents('.hf-con').remove();
+            }
+        });
+    </script>
+    <!--删除评论块-->
+    <script type="text/javascript">
+        $('.commentAll').on('click','.removeBlock',function(){
+            var id = $(this).data('id');        //这个用this 来指定当前标签获得特定id值，太帅了~           重中之重
+            // alert("即将删除此id的评论及其下回复：："+id)
+            var oT = $(this).parents('.date-dz-right').parents('.date-dz').parents('.all-pl-con');
+            if(oT.siblings('.all-pl-con').length >= 1){
+                // alert("删除回复")
+                $.ajax({
+                    type:"POST",
+                    url:"/user/comment/deleteRevert",
+                    data:{revertId:id},
+                    dataType:"text",
+                    success:function (json) {
+                        if (json == "success"){
+                            oT.remove();
+                        }
+                    }
+                });
+                oT.remove();
+            }else {
+                //删除评论及其下的评论
+                // alert("删除评论及回复内容")
+                $.ajax({
+                    type:"POST",
+                    url:"/user/comment/delete",
+                    data:{commentId:id},
+                    dataType:"text",
+                    success:function (json) {
+                        if (json == "success"){
+                            oT.remove();
+                        }
+                    }
+                });
+                $(this).parents('.date-dz-right').parents('.date-dz').parents('.all-pl-con').parents('.hf-list-con').css('display','none')
+            }
+            $(this).parents('.date-dz-right').parents('.date-dz').parents('.comment-show-con-list').parents('.comment-show-con').remove();
+        })
+    </script>
+    <!--点赞-->
+    <script type="text/javascript">
+        $('.comment-show').on('click','.date-dz-z',function(){
+            var rid = $(this).data('rid');        //获得点赞的评论或者回复的id
+            var kind = $(this).data('type');    //获取点赞的是评论还是回复 哎，评论和回复应该放在一张表的
+            /*alert(rid)
+            alert(kind)
+            return*/
+            var zNum = $(this).find('.z-num').html();
+            // alert(zNum)//点赞数量
+            if($(this).is('.date-dz-z-click')){
+                // alert("取消点赞")
+                zNum--;
+                $.post("/user/comment/giveLike",{type:-1,id:rid,kind:kind},function (json) {
+                    if (json!="success"){
+                        alert("请先登录")
+                        return;
+                    }
+                })
+                $(this).removeClass('date-dz-z-click red');
+                $(this).find('.z-num').html(zNum);
+                $(this).find('.date-dz-z-click-red').removeClass('red');
+
+            }else {
+                // alert("点赞")
+                zNum++;
+                $.post("/user/comment/giveLike",{type:1,id:rid,kind:kind},function (json) {
+                    if (json!="success"){
+                        alert("请先登录")
+                        return;
+                    }
+                })
+                $(this).addClass('date-dz-z-click');
+                $(this).find('.z-num').html(zNum);
+                $(this).find('.date-dz-z-click-red').addClass('red');
+            }
+        })
+    </script>
+</div>
+
+<!--载入尾部-->
+<div th:replace="fragment/footer::footer-fragment"></div>
+<script th:src="@{/bootstrap/js/bootstrap.js}"></script>
+
+</body>
+</html>

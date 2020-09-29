@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.example.demo.mapper.RevertMapper">
+
+    <resultMap type="com.example.demo.pojo.Revert" id="resultMap">
+        <result column="id" property="id"/>
+        <result column="cid" property="cid"/>
+        <result column="user_id"  property="userId"/>
+        <result column="revert_date"  property="revertDate"/>
+        <result column="revert_content" property="revertContent"/>
+        <result column="like_count" property="likeCount"/>
+        <result column="user_nick_name" property="userNickName"/>
+        <result column="user_head_url" property="userHeadUrl"/>
+    </resultMap>
+
+    <insert id="addRevert" parameterType="com.example.demo.pojo.Revert">
+        insert into shopmall.tb_revert (cid, revert_date, user_id, revert_content, like_count, user_nick_name, user_head_url)
+        values (#{cid},#{revertDate},#{userId},#{revertContent},#{likeCount},#{userNickName},#{userHeadUrl})
+    </insert>
+    <!--点赞-->
+    <update id="increase" parameterType="int">
+        update shopmall.tb_revert set like_count = like_count + 1 where id = #{id}
+    </update>
+    <update id="decrease" parameterType="int">
+        update shopmall.tb_revert set like_count = like_count - 1 where id = #{id}
+    </update>
+    <delete id="deleteById" parameterType="int">
+        delete from shopmall.tb_revert where  id = #{id}
+    </delete>
+
+    <select id="queryRevertByCid" parameterType="int" resultMap="resultMap">
+        select * from shopmall.tb_revert where cid = #{cid} order by revert_date
+    </select>
+
+    <delete id="deleteRevertsByCommentId" parameterType="int">
+        delete from shopmall.tb_revert where cid = #{cid}
+    </delete>
+
+    <!--评论下的回复数量-->
+    <select id="revertCountInCid" parameterType="int" resultType="int">
+        select count(*) from shopmall.tb_revert where cid = #{cid}
+    </select>
+
+</mapper>
